@@ -8,13 +8,14 @@ $l_name = $_POST['lname'];
 $p_mobile = $_POST['mobile'];
 $p_email = $_POST['email'];
 $p_password = $_POST['password'];
+$pass_enc = md5($p_password); //encrypt password using md5
 
 //prepare query
 $sql = "
     INSERT INTO users (
         firstname, lastname, mobile_phone, email, password)
     VALUES (
-        '$f_name', '$l_name', '$p_mobile', '$p_email', '$p_password'
+        '$f_name', '$l_name', '$p_mobile', '$p_email', '$pass_enc'
     )
 ";
 
@@ -32,6 +33,10 @@ if ($supabase_res ) {
 } else {
     echo "<br>Error inserting data " ;
 }
+
+echo "<script>alert('User registered successfully!')</script>";
+header("refresh:0; url=SignIn.html");
+
 /*
 echo "First Name is: " . $f_name;
 echo "Last Name is: " . $l_name;
