@@ -8,34 +8,41 @@ $l_name = $_POST['lname'];
 $p_mobile = $_POST['mobile'];
 $p_email = $_POST['email'];
 $p_password = $_POST['password'];
+$enc_pass = md5($p_password);
 
-//prepare query
-$sql = "
+//sql to validate if user already exists
+$sql_validation = 
+    "SELECT email FROM users WHERE email = '$p_email'";
+
+//$local_res = pg_query($local_conn, $sql_validation);
+$supabase_res = pg_query($supabase_conn, $sql_validation);
+$total = pg_fetch_result($supabase_res, 0, 0);
+
+if ($total > 0) {
+    echo "<script>alert('User already exists ::: ')</script>";
+    header ("refresh: 0; url=signin.html");
+} else {
+    //prepare query
+    $sql = "
     INSERT INTO users (
         firstname, lastname, mobile_phone, email, password)
     VALUES (
-        '$f_name', '$l_name', '$p_mobile', '$p_email', '$p_password'
-    )
-";
+        '$f_name', '$l_name', '$p_mobile', '$p_email', '$enc_pass'
+    )";
 
-$local_res = pg_query($local_conn, $sql);
-$supabase_res = pg_query($supabase_conn, $sql);
+    $supabase_res = pg_query($supabase_conn, $sql);
+    if ($supabase_res ) {
+        echo "<script>alert('Data inserted successfully into database.')</script>";
+        header ("refresh: 0; url=signin.html");
+    } else {
+        echo "<script>alert('Error inserting data.')</script>";
+        header ("refresh: 0; url=signup.html");
+    }
+}
 
-if ($local_res ) {
+/*if ($local_res ) {
     echo "<br>Data inserted successfully into database.";
 } else {
     echo "<br>Error inserting data " ;
-}
-
-if ($supabase_res ) {
-    echo "<br>Data inserted successfully into database.";
-} else {
-    echo "<br>Error inserting data " ;
-}
-/*
-echo "First Name is: " . $f_name;
-echo "Last Name is: " . $l_name;
-echo "Mobile Number is: " . $p_mobile;
-echo "Email is: " . $p_email;
-echo "Password is: " . $p_password;*/
+}*/
 ?>
