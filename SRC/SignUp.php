@@ -11,33 +11,41 @@ $p_password = $_POST['password'];
 $enc_pass = md5($p_password);
 
 //sql to validate if user already exists
-$sql_validation = 
+$sql_validation_Email = 
     "SELECT email FROM users WHERE email = '$p_email'";
 
+$sql_validation_phone = 
+    "SELECT mobile_phone FROM users WHERE mobile_phone = '$p_mobile'";
+
 //$local_res = pg_query($local_conn, $sql_validation);
-$supabase_res = pg_query($supabase_conn, $sql_validation);
-$total = pg_fetch_result($supabase_res, 0, 0);
+$supabase_res_email = pg_query($supabase_conn, $sql_validation_Email);
+$total_email = pg_fetch_result($supabase_res_email, 0, 0);
+$supabase_res_phone = pg_query($supabase_conn, $sql_validation_phone);
+$total_phone = pg_fetch_result($supabase_res_phone, 0, 0);
 
-if ($total > 0) {
-    echo "<script>alert('User already exists ::: ')</script>";
-    header ("refresh: 0; url=signin.html");
+if ($total_email > 0) {
+    echo "<script>alert('Email already exist, please use another one')</script>";
+    header ("refresh: 0; url=signUp.html");
+} else if ($total_phone > 0){
+    echo "<script>alert('Mobile Phone already exist, please use another one')</script>";
+    header ("refresh: 0; url=signUp.html");
 } else {
-    //prepare query
-    $sql = "
-    INSERT INTO users (
-        firstname, lastname, mobile_phone, email, password)
-    VALUES (
-        '$f_name', '$l_name', '$p_mobile', '$p_email', '$enc_pass'
-    )";
+        //prepare query
+        $sql = "
+            INSERT INTO users (
+                firstname, lastname, mobile_phone, email, password)
+            VALUES (
+                '$f_name', '$l_name', '$p_mobile', '$p_email', '$enc_pass'
+            )";
 
-    $supabase_res = pg_query($supabase_conn, $sql);
-    if ($supabase_res ) {
-        echo "<script>alert('Data inserted successfully into database.')</script>";
-        header ("refresh: 0; url=signin.html");
-    } else {
-        echo "<script>alert('Error inserting data.')</script>";
-        header ("refresh: 0; url=signup.html");
-    }
+        $supabase_res = pg_query($supabase_conn, $sql);
+        if ($supabase_res ) {
+            echo "<script>alert('Data inserted successfully into database.')</script>";
+            header ("refresh: 0; url=signin.html");
+        } else {
+            echo "<script>alert('Error inserting data.')</script>";
+            header ("refresh: 0; url=signup.html");
+        }
 }
 
 /*if ($local_res ) {
