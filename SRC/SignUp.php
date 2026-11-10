@@ -9,6 +9,7 @@ $p_mobile = $_POST['mobile'];
 $p_email = $_POST['email'];
 $p_password = $_POST['password'];
 $enc_pass = md5($p_password);
+$photo = 'photo/photouserdefault.png';
 
 //sql to validate if user already exists
 $sql_validation_Email = 
@@ -33,9 +34,9 @@ if ($total_email > 0) {
         //prepare query
         $sql = "
             INSERT INTO users (
-                firstname, lastname, mobile_phone, email, password)
-            VALUES (
-                '$f_name', '$l_name', '$p_mobile', '$p_email', '$enc_pass'
+                firstname, lastname, mobile_phone, email, password, photo_url
+            ) VALUES (
+                '$f_name', '$l_name', '$p_mobile', '$p_email', '$enc_pass', '$photo'
             )";
 
         $supabase_res = pg_query($supabase_conn, $sql);
