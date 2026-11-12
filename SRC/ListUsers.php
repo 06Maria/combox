@@ -1,6 +1,6 @@
 <?php
     require('../config/database.php');
-    $sql="SELECT firstname, lastname,mobile_phone,email,case when status = true then 'Active' else 'Inactive' end as user_status,photo_url
+    $sql="SELECT firstname, lastname,mobile_phone,email,id,case when status = true then 'Active' else 'Inactive' end as user_status,photo_url
          FROM users order by lastname asc";
     $res = pg_query($supabase_conn, $sql);
 ?>
@@ -21,6 +21,7 @@
             <th>Email</th>
             <th>Status</th>
             <th>Photo</th>
+            <th>Actions</th>
         </tr>
         <?php
             while($row = pg_fetch_assoc($res)){
@@ -32,9 +33,9 @@
                 echo "<td>".$row['user_status']."</td>";
                 echo "<td align='center'><img src='".$row['photo_url']."'width='30'></td>";
                 echo "<td>
-                <img src = 'icons /lupa.png' width = '20' height = '20'> &nbsp;&nbsp;
-                <img src = 'icons /lapiz.png' width = '20' height = '20'> &nbsp;&nbsp;
-                <img src = 'icons /trash.png' width = '20' height = '20'> &nbsp;&nbsp;
+                <a href='EditUser.php?id=".$row['id']."'><img src = 'icons /lapiz.png' width = '20' height = '20'></a>&nbsp;&nbsp;
+                <a href='EditUser.php?id=".$row['id']."'><img src = 'icons /lupa.png' width = '20' height = '20'></a>&nbsp;&nbsp;
+                <a href='EditUser.php?id=".$row['id']."'><img src = 'icons /trash.png' width = '20' height = '20'></a>&nbsp;&nbsp;
                 </td>"; 
                 echo "</tr>";
             }
