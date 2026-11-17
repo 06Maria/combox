@@ -32,12 +32,12 @@
     if (!$local_conn) {
         die("Local connection failed: ");
     }else {
-        echo "<br>Local connection established successfully";
+        //echo "<br>Local connection established successfully";
     }
 
     if (!$supabase_conn) {
         die("Supabase connection failed: ");
     }else {
-        echo "<br>Supabase connection established successfully";
+        //echo "<br>Supabase connection established successfully";
     }
 ?>
